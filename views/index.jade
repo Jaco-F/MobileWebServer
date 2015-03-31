@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+      form(name="login", action="/users", method="post")
+        input(type="text", name="user")

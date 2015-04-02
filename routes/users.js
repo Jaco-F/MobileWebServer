@@ -64,15 +64,22 @@ router.post("/login",function (req, res) {
     var post = {email: req.body.email , password: req.body.password};
 
     connection.query('SELECT * FROM `users` WHERE `email`='+ connection.escape(post.email.toString()) + " AND `password`=" + connection.escape(post.password.toString()), function (error,rows,fields) {
+        var jsonObj;
         if (error) {
             console.log(error);
-            res.send("Error in database query");
+            jsonObj = JSON();
+            jsonObj = { "response" : "Error in database query"};
+            res.send(jsonObj);
         } else {
             if (rows.length == 0) {
-                res.send("Wrong username or password");
+                jsonObj = { "response" : "Wrong username or password"};
+                res.send(jsonObj);
             }
             else{
-                res.send("success");
+                delete rows[0].password;
+                rows[0].response = "success";
+
+                res.send(rows[0]);
                 console.log('success');
             }
         }

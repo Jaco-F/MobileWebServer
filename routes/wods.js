@@ -42,4 +42,20 @@ router.get('/', function(req, res, next) {
     connection.end();
 });
 
+router.get('/:id/exercises', function(req, res, next) {
+    var connection = DB();
+    var wod_id = req.params.id;
+
+    connection.connect();
+    connection.query('SELECT we.id_wod,we.id_exercise,e.name,e.equipment,we.rounds,we.reps,we.rest_time,we.weight,we.duration,e.icon_id ' +
+    'FROM exercises AS e JOIN wods_exercises AS we ON e.id = we.id_exercise WHERE we.id_wod =' + connection.escape(wod_id) , function(err, rows, fields) {
+        if (err) throw err;
+
+        console.log(rows);
+        res.send(rows);
+    });
+
+    connection.end();
+});
+
 module.exports = router;

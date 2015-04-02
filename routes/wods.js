@@ -58,4 +58,19 @@ router.get('/:id/exercises', function(req, res, next) {
     connection.end();
 });
 
+router.get('/user/:email', function(req, res, next) {
+    var connection = DB();
+    var email = req.params.email;
+    connection.connect();
+    connection.query('SELECT wod_name,gym_name,wods.id FROM wods JOIN gyms ON wods.id_gym = gyms.id WHERE wods.id_user = ' +
+    '(SELECT id FROM users WHERE email = ' + connection.escape(email) + ')' , function(err, rows, fields) {
+        if (err) throw err;
+
+        console.log(rows);
+        res.send(rows);
+    });
+
+    connection.end();
+});
+
 module.exports = router;

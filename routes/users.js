@@ -58,6 +58,25 @@ router.post("/",function (req, res) {
     });
 });
 
+router.put("/",function (req, res) {
+    var connection = DB();
+
+    var post = {email: req.body.email , name: req.body.name, surname: req.body.surname,
+        weight: req.body.weight, height: req.body.height, birthdate: req.body.birthdate};
+
+    connection.query('UPDATE `users` SET ? WHERE email = ?',[post,post.email], function (error) {
+        if (error) {
+
+            console.log(error);
+        } else {
+            res.send("updated");
+            console.log('success');
+
+        }
+    });
+});
+
+
 router.post("/login",function (req, res) {
     var connection = DB();
 
